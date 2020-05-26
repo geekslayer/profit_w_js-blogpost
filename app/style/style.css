@@ -15,7 +15,7 @@ header {
 }
 
 .home-page header, .new-post-page header  {
-    background-image: url(/assets/banner.jpeg);
+    background-image: url(/app/assets/banner.jpeg);
 }
 
 .post-link {
@@ -88,7 +88,7 @@ header::before {
     height: 100px;
     background-color: white;
     border-radius: 50%;
-    background-image: url(/assets/profile.png);
+    background-image: url(/app/assets/profile.jpeg);
     background-size: cover;
 }
 

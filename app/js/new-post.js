@@ -12,9 +12,7 @@ const submitNewPost = () => {
     fetch(API_URL, {
         method: 'POST',
         body: data
-    }).then(()=>{
-        setTimeout(()=>{
-            window.location.href = "index.html";
-        }, 1000)
+    }).then(() => {
+        window.location.href = "index.html";
     })
 }

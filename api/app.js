@@ -1,11 +1,12 @@
+'use strict';
+
 const express = require("express");
 const app = express();
 const multer  = require('multer');
-const Post = require('./api/models/post');
+const Post = require('./services/post');
+const PostService = require("./services/post");
 
 // ################################################################ //
-
-const postsData = new Post();
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -27,28 +28,42 @@ const getExt = (mimetype) => {
 
 var upload = multer({ storage: storage });
 
-
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     next();
 });
+
 app.use(express.json());
+
 app.use('/uploads', express.static('uploads'));
 
+// ################################################ //
+
+const postServiceData = new PostService();
+
 app.get("/api/posts", (req, res)=>{
-    res.status(200).send(postsData.get());
-})
+    let results = postServiceData.get();
+
+    results.then((data) => {
+        res.status(200).send(data);
+    })
+    .catch((err) => {
+        res.status(500).send(err);
+    });
+});
 
 app.get("/api/posts/:postId", (req, res)=>{
     const postId = req.params.postId;
-    const posts = postsData.get();
-    const foundPost = posts.find((post) => post.id == postId);
-    if(foundPost){
-        res.status(200).send(foundPost);
-    } else {
-        res.status(404).send("Not Found")
-    }
-})
+    const post = postServiceData.getPost(postId);
+
+    post.then((data) => {
+        if (data) {
+            res.status(200).send(data);
+        } else {
+            res.status(404).send("Not Found")
+        }
+    });
+});
 
 app.post("/api/posts", upload.single("post-image") ,(req, res)=>{
     
@@ -59,8 +74,31 @@ app.post("/api/posts", upload.single("post-image") ,(req, res)=>{
         "post_image": req.file.path,
         "added_date": `${Date.now()}`
     }
-    postsData.add(newPost);
-    res.status(201).send(newPost);
-})
+    
+    postServiceData
+        .add(newPost)
+        .then((data) => {
+            res.status(201).send(data);
+        });
+});
+
+app.delete("/api/posts/cleanslate", (req, res) => {
+    if (req.query['cleanall'] === '1') {
+        console.log('param cleanall ::: ', req.query['cleanall']);
+        postServiceData.deleteAll();
+        res.status(200).send('ok');
+    } else {
+        res.status(401).send('not ok');
+    }
+});
+
+app.post("/api/posts/populate", (req, res) => {
+    try {
+        postServiceData.createBasePosts();
+        res.status(200).send('Everything good');
+    } catch(e) {
+        res.status(500).send(e);
+    }
+});
 
 app.listen(3000, ()=>console.log("Listening on http://localhost:3000/"));
