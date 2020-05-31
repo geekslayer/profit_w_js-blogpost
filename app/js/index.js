@@ -5,6 +5,11 @@ const API_BASE_URL = "http://localhost:3000/";
 
 window.onload = () => {
     getPosts();
+
+    $('.profile-image').on('click',(e) => {
+        console.log(e.ctrlKey);
+        console.log(e.shiftKey);
+    });
 }
 
 const getPosts = () => {
