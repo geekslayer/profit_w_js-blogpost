@@ -22,8 +22,6 @@ class AppDAO {
                     console.log(err);
                     reject(err);
                 } else {
-                    console.log(sql);
-                    console.log(params);
                     resolve({ id: this.lastID });
                 }
             });

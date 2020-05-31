@@ -7,12 +7,17 @@ window.onload = () => {
     getPosts();
 
     $('.profile-image').on('click',(e) => {
-        console.log(e.ctrlKey);
-        console.log(e.shiftKey);
+        if (e.ctrlKey && e.shiftKey) {
+            deleteAll();
+            console.log('Should delete');
+        } else if (e.ctrlKey) {
+            populate();
+            console.log('should populate');
+        }
     });
 }
 
-const getPosts = () => {
+getPosts = () => {
     fetch(API_URL, {
         method: 'GET'
     }).then((response)=>{
@@ -22,7 +27,25 @@ const getPosts = () => {
     })
 }
 
-const buildPosts = (blogPosts) => {
+deleteAll= () => {
+    $.ajax({
+        url: `${API_URL}/cleanslate?cleanall=1`,
+        method: 'POST'
+    }).then(() => {
+        console.log('All deleted!!!');
+    });
+}
+
+populate = () => {
+    $.ajax({
+        url: `${API_URL}/populate`,
+        method: 'POST'
+    }).then(() => {
+        console.log('All created!!!');
+    });
+}
+
+buildPosts = (blogPosts) => {
     let blogPostsContent = "";
     for(blogPost of blogPosts){
         const postImage = API_BASE_URL + blogPost.post_image;
@@ -45,5 +68,5 @@ const buildPosts = (blogPosts) => {
             </a>
         `
     }
-    document.querySelector(".blog-posts").innerHTML = blogPostsContent;
+    $(".blog-posts").html(blogPostsContent);
 }

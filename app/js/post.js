@@ -6,13 +6,13 @@ window.onload = () => {
 }
 
 const getPostIdParam = () => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
     return urlParams.get('id');
 }
 
-const getPost = () => {
-    const url = `${API_URL}${getPostIdParam()}`
+getPost = () => {
+    let url = `${API_URL}${getPostIdParam()}`
     fetch(url, {
         method: 'GET'
     }).then((response)=>{
@@ -23,12 +23,11 @@ const getPost = () => {
 }
 
 const buildPost = (data) => {
-    console.log(data);
-    const postDate = new Date(parseInt(data.added_date)).toDateString();
-    const postImage = API_BASE_URL + data.post_image;
-    document.querySelector("header").style.backgroundImage = `url(${postImage})`;
-    document.getElementById("individual-post-title").innerText = data.title;
-    document.getElementById("individual-post-date").innerText =  `Published on ${postDate}`;
-    document.getElementById("individual-post-content").innerText = data.content;
+    let postDate = new Date(parseInt(data.added_date)).toDateString();
+    let postImage = API_BASE_URL + data.post_image;
+    $("header").css('backgroundImage',`url(${postImage})`);
+    $("#individual-post-title").text(data.title);
+    $("#individual-post-date").text(`Published on ${postDate}`);
+    $("#individual-post-content").text(data.content);
 }
 

@@ -1,11 +1,14 @@
 const API_URL = "http://localhost:3000/api/posts";
 
 const submitNewPost = () => {
-    let input = document.querySelector('input[type="file"]');
-    const title = document.getElementById("form-post-title").value;
-    const content = document.getElementById("form-post-content").value;
+    let input = $('input[type="file"]');
+    let title = $("#form-post-title").val();
+    let content = $("#form-post-content").val();
     let data = new FormData();
-    data.append('post-image', input.files[0]);
+
+    console.log(input);
+
+    data.append('post-image', input[0].files[0]);
     data.append('title', title );
     data.append('content', content);
 
@@ -14,5 +17,5 @@ const submitNewPost = () => {
         body: data
     }).then(() => {
         window.location.href = "index.html";
-    })
+    });
 }

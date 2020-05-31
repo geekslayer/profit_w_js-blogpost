@@ -82,9 +82,20 @@ app.post("/api/posts", upload.single("post-image") ,(req, res)=>{
         });
 });
 
-app.delete("/api/posts/cleanslate", (req, res) => {
+app.delete("/api/posts/:postId", (req, res) => {
+    let postId = req.params.postId;
+    
+    try {
+        postServiceData.delete(postId);
+        res.status(200).send('ok');
+    } catch(e) {
+        res.status(500).send(e);
+    }
+    
+});
+
+app.post("/api/posts/cleanslate", (req, res) => {
     if (req.query['cleanall'] === '1') {
-        console.log('param cleanall ::: ', req.query['cleanall']);
         postServiceData.deleteAll();
         res.status(200).send('ok');
     } else {

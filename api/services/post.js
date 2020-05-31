@@ -46,7 +46,6 @@ class PostService {
         let imagesToDelete = this.postRepo.deleteAllPosts();
         
         imagesToDelete.then((data) => {
-            console.log(data);
             if (data) {
                 data.forEach((img) => {
                     if (!imagesToKeep.includes(img.post_image)) {
